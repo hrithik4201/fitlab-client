@@ -1,0 +1,17 @@
+.small-nav > .active {
+  border-bottom: 4px solid #ff2625;
+}
+
+.nav-links {
+  text-decoration: none;
+  color: black;
+  font-size: 1.2em;
+}
+
+.small-nav {
+  background: white;
+  padding: 20px;
+  color: black;
+  display: flex;
+  justify-content: space-evenly;
+}

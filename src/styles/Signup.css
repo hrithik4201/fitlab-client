@@ -1,0 +1,22 @@
+form.signup {
+  width: 400px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 120px;
+}
+
+.signup h1 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.signup button {
+  width: 100%;
+}
