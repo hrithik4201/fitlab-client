@@ -64,7 +64,7 @@ const WorkoutForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto shadow-lg border-0 bg-white">
+    <Card className="w-full shadow-lg border-0 bg-white">
       <CardHeader className="space-y-1 pb-4">
         <CardTitle className="text-2xl font-bold flex items-center gap-2 text-gray-900">
           <Dumbbell className="h-6 w-6 text-[#ff2625]" />

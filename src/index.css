@@ -202,8 +202,7 @@ body {
 
 #similar-exercises .react-horizontal-scrolling-menu--scroll-container {
   display: flex;
-  padding-top: 25px;
-  height: 515px !important;
+  gap: 1rem;
   overflow-y: hidden;
   position: relative;
   width: 100%;

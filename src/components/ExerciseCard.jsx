@@ -6,93 +6,52 @@ import { Badge } from "@/components/ui/badge";
 const ExerciseCard = ({ exercise }) => {
   const exerciseId = exercise.exerciseId || exercise.id;
   const exerciseName = exercise.name;
-  const bodyPart = exercise.bodyPart;
-  const target = exercise.target;
-  const equipment = exercise.equipment;
-  const difficulty = exercise.difficulty;
-  const category = exercise.category;
-
-  const imageUrl =
-    exercise.gifUrl ||
-    `https://via.placeholder.com/400x300?text=${encodeURIComponent(
-      exerciseName
-    )}`;
+  const bodyPart = exercise.bodyPart || exercise.bodyParts?.[0];
+  const target = exercise.target || exercise.targetMuscles?.[0];
+  const gifUrl = exercise.gifUrl;
 
   return (
-    <Link className="group" to={`/exercise/${exerciseId}`}>
-      <Card className="w-full max-w-[400px] bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-        <div className="relative overflow-hidden rounded-t-lg">
+    <Link to={`/exercise/${exerciseId}`} className="block w-full">
+      <Card className="group hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden border-0 shadow-lg h-full flex flex-col w-80">
+        {/* Fixed Image Container */}
+        <div className="relative overflow-hidden h-56 flex-shrink-0">
           <img
-            src={imageUrl}
+            src={gifUrl}
             alt={exerciseName}
             loading="lazy"
-            className="w-full h-[300px] lg:h-[326px] object-cover group-hover:scale-110 transition-transform duration-300"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             onError={(e) => {
-              // Fallback to placeholder if image fails to load
-              e.target.src = `https://via.placeholder.com/400x300/ff2625/white?text=${encodeURIComponent(
-                exerciseName
-              )}`;
+              e.target.src =
+                "https://via.placeholder.com/320x224/f0f0f0/666666?text=Exercise+Image";
             }}
           />
-
-          {/* Overlay with badges */}
-          <div className="absolute top-2 left-2 flex flex-wrap gap-2">
-            {difficulty && (
-              <Badge
-                variant="secondary"
-                className={`text-xs font-medium ${
-                  difficulty === "beginner"
-                    ? "bg-green-100 text-green-800"
-                    : difficulty === "intermediate"
-                    ? "bg-yellow-100 text-yellow-800"
-                    : "bg-red-100 text-red-800"
-                }`}
-              >
-                {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-              </Badge>
-            )}
-            {category && (
-              <Badge variant="outline" className="text-xs bg-white/90">
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </Badge>
-            )}
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
 
-        <CardContent className="p-4 space-y-3">
-          {/* Exercise Name */}
-          <h3 className="text-lg font-bold text-gray-900 capitalize leading-tight line-clamp-2 group-hover:text-[#ff2625] transition-colors">
-            {exerciseName}
-          </h3>
+        {/* Fixed Content Container */}
+        <CardContent className="p-4 flex-1 flex flex-col justify-between">
+          <div className="flex gap-2 mb-2 flex-wrap">
+            <Badge
+              variant="secondary"
+              className="bg-pink-100 text-pink-700 hover:bg-pink-200 font-semibold capitalize text-xs px-2 py-1"
+            >
+              {bodyPart}
+            </Badge>
+            <Badge
+              variant="secondary"
+              className="bg-amber-100 text-amber-700 hover:bg-amber-200 font-semibold capitalize text-xs px-2 py-1"
+            >
+              {target}
+            </Badge>
+          </div>
 
-          {/* Body Part and Target */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">Body Part:</span>
-              <Badge
-                variant="secondary"
-                className="bg-blue-50 text-blue-700 capitalize"
-              >
-                {bodyPart}
-              </Badge>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">Target:</span>
-              <Badge
-                variant="secondary"
-                className="bg-purple-50 text-purple-700 capitalize"
-              >
-                {target}
-              </Badge>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">Equipment:</span>
-              <Badge variant="outline" className="capitalize">
-                {equipment}
-              </Badge>
-            </div>
+          {/* Fixed height title container with ellipsis for overflow */}
+          <div className="">
+            <h3 className="text-base font-bold text-gray-900 capitalize leading-tight group-hover:text-red-600 transition-colors duration-300 line-clamp-2 h-12 flex items-start">
+              <span className="block overflow-hidden text-ellipsis">
+                {exerciseName}
+              </span>
+            </h3>
           </div>
         </CardContent>
       </Card>

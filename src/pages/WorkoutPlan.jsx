@@ -35,6 +35,7 @@ import cardio from "../assets/icons/cardio.png";
 import HIIT from "../assets/icons/HIIT.png";
 import yoga from "../assets/icons/yoga.png";
 import hike from "../assets/icons/hike.png";
+import WorkoutPlanDisplay from "@/components/WorkoutPlanDisplay";
 
 const WorkoutPlan = () => {
   const [formData, setFormData] = useState({
@@ -117,28 +118,6 @@ const WorkoutPlan = () => {
 
     if (!validateForm()) return;
 
-    const text = `Create a personalized workout plan to help the user achieve their fitness goals. The user is a ${
-      formData.age
-    }-year-old ${formData.gender} who currently weighs ${
-      formData.currentWeight
-    } kgs, stands at a height of ${
-      formData.height
-    } cms, and desires to reach a weight of ${
-      formData.desiredWeight
-    } kgs. Their primary fitness objective is ${
-      formData.primaryGoal
-    }, and their secondary goal is ${
-      formData.secondaryGoal || "general fitness"
-    }. They prefer to focus on ${formData.workoutType} workouts and has ${
-      formData.fitnessLevel
-    } level of fitness. The ideal workout schedule for them is ${
-      formData.workoutFreq[0]
-    } times a week at ${
-      formData.workoutPlace
-    }. Please provide a detailed workout plan for ${
-      formData.planDays[0]
-    } days, including suggested exercises, reps, and sets. Format your response using HTML. Use headings, subheadings, bullet points, and bold to organize the information. Do not display user information in the response.`;
-
     try {
       setLoading(true);
       setError("");
@@ -148,15 +127,15 @@ const WorkoutPlan = () => {
 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/planner/workout-plan`,
-        { text },
+        formData,
         { headers }
       );
 
-      setWorkoutPlan(response.data.text);
+      setWorkoutPlan(response.data.workoutPlan);
     } catch (error) {
       console.error(error);
       setError(
-        error.response?.data?.message ||
+        error.response?.data?.error ||
           "Failed to generate workout plan. Please try again."
       );
     } finally {
@@ -500,38 +479,7 @@ const WorkoutPlan = () => {
       </Card>
 
       {/* Workout Plan Display */}
-      {workoutPlan && (
-        <Card className="shadow-xl border-0">
-          <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
-            <CardTitle className="text-2xl text-gray-900 flex items-center gap-2">
-              <Target className="h-6 w-6 text-green-600" />
-              Your Personalized Workout Plan
-            </CardTitle>
-            <Button
-              variant="outline"
-              className="w-fit"
-              onClick={() => {
-                const element = document.createElement("a");
-                const file = new Blob([workoutPlan], { type: "text/html" });
-                element.href = URL.createObjectURL(file);
-                element.download = "my-workout-plan.html";
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
-              }}
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Download Plan
-            </Button>
-          </CardHeader>
-          <CardContent className="p-8">
-            <div
-              className="prose max-w-none"
-              dangerouslySetInnerHTML={{ __html: workoutPlan }}
-            />
-          </CardContent>
-        </Card>
-      )}
+      {workoutPlan && <WorkoutPlanDisplay workoutPlan={workoutPlan} />}
     </div>
   );
 };

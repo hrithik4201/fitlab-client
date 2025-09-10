@@ -102,16 +102,16 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
-      <div className="container mx-auto px-4 py-8 space-y-8">
+      <div className="container mx-auto px-4 py-6 space-y-6">
         {/* Header Section */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                 {getGreeting()},{" "}
                 {user?.email?.split("@")[0] || "Fitness Champion"}! 👋
               </h1>
-              <p className="text-lg text-gray-600 mt-2">
+              <p className="text-base text-gray-600 mt-1">
                 {getMotivationalMessage()}
               </p>
             </div>
@@ -124,66 +124,66 @@ const Home = () => {
         </div>
 
         {/* Quick Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-blue-500 rounded-lg">
-                  <Activity className="h-4 w-4 text-white" />
+            <CardContent className="p-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-1.5 bg-blue-500 rounded-lg">
+                  <Activity className="h-3 w-3 text-white" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-blue-700">
+                  <p className="text-xl font-bold text-blue-700">
                     {stats.totalWorkouts}
                   </p>
-                  <p className="text-sm text-blue-600">Total Workouts</p>
+                  <p className="text-xs text-blue-600">Total Workouts</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-green-500 rounded-lg">
-                  <TrendingUp className="h-4 w-4 text-white" />
+            <CardContent className="p-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-1.5 bg-green-500 rounded-lg">
+                  <TrendingUp className="h-3 w-3 text-white" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-green-700">
+                  <p className="text-xl font-bold text-green-700">
                     {stats.totalVolume}
                   </p>
-                  <p className="text-sm text-green-600">Total Volume (kg)</p>
+                  <p className="text-xs text-green-600">Total Volume (kg)</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-purple-500 rounded-lg">
-                  <Target className="h-4 w-4 text-white" />
+            <CardContent className="p-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-1.5 bg-purple-500 rounded-lg">
+                  <Target className="h-3 w-3 text-white" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-purple-700">
+                  <p className="text-xl font-bold text-purple-700">
                     {stats.averageWeight}
                   </p>
-                  <p className="text-sm text-purple-600">Avg Weight (kg)</p>
+                  <p className="text-xs text-purple-600">Avg Weight (kg)</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-orange-500 rounded-lg">
-                  <Zap className="h-4 w-4 text-white" />
+            <CardContent className="p-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-1.5 bg-orange-500 rounded-lg">
+                  <Zap className="h-3 w-3 text-white" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-orange-700">
+                  <p className="text-xl font-bold text-orange-700">
                     {stats.thisWeekWorkouts}
                   </p>
-                  <p className="text-sm text-orange-600">This Week</p>
+                  <p className="text-xs text-orange-600">This Week</p>
                 </div>
               </div>
             </CardContent>
@@ -191,12 +191,12 @@ const Home = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Workouts List - Takes up 2 columns on large screens */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <Calendar className="h-6 w-6 text-[#ff2625]" />
+              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-[#ff2625]" />
                 Recent Workouts
               </h2>
               {workouts && workouts.length > 0 && (
@@ -238,7 +238,7 @@ const Home = () => {
           </div>
 
           {/* Sidebar - Add Workout Form */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             <WorkoutForm />
 
             {/* Quick Tips Card */}

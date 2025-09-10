@@ -7,14 +7,14 @@ const ExerciseVideos = ({ exerciseVideos, name }) => {
   if (!exerciseVideos.length) return <Loader />;
 
   return (
-    <div className="mt-20 lg:mt-[103px] p-5">
-      <h2 className="text-2xl lg:text-[44px] font-bold text-black mb-8">
+    <div className="mt-8 lg:mt-12 p-4">
+      <h2 className="text-xl lg:text-3xl font-bold text-black mb-6">
         Watch <span className="text-[#FF2625] capitalize">{name}</span> exercise
         videos
       </h2>
 
-      <div className="flex flex-col lg:flex-row gap-8 lg:gap-[110px] flex-wrap items-start">
-        {exerciseVideos?.slice(0, 3)?.map((item, index) => (
+      <div className="flex flex-col lg:flex-row gap-6 flex-wrap items-center justify-between">
+        {exerciseVideos?.slice(0, 4)?.map((item, index) => (
           <Card
             key={index}
             className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden max-w-sm"
@@ -41,11 +41,11 @@ const ExerciseVideos = ({ exerciseVideos, name }) => {
                 </div>
               </div>
 
-              <CardContent className="p-4">
-                <h3 className="text-lg lg:text-[28px] font-semibold text-black mb-2 line-clamp-2 group-hover:text-[#FF2625] transition-colors">
+              <CardContent className="p-3">
+                <h3 className="text-base lg:text-lg font-semibold text-black mb-1 line-clamp-2 group-hover:text-[#FF2625] transition-colors">
                   {item.video.title}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-xs text-gray-600">
                   {item.video.channelName}
                 </p>
               </CardContent>
