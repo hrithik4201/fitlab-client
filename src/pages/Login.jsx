@@ -25,7 +25,7 @@ import {
   Shield,
   Zap,
 } from "lucide-react";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/Logo.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
