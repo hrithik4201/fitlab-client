@@ -12,7 +12,7 @@ const ExerciseCard = ({ exercise }) => {
 
   return (
     <Link to={`/exercise/${exerciseId}`} className="block w-full">
-      <Card className="group hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden border-0 shadow-lg h-full flex flex-col w-80">
+      <Card className="group hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden border-0 shadow-lg h-full flex flex-col w-full">
         {/* Fixed Image Container */}
         <div className="relative overflow-hidden h-56 flex-shrink-0">
           <img
