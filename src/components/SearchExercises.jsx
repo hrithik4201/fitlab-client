@@ -1,49 +1,73 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-
-import { exerciseOptions, fetchData } from "../utils/fetchData";
+import { Search, Loader2 } from "lucide-react";
+import { exerciseAPI } from "../utils/fetchData";
 import HorizontalScrollbar from "./HorizontalScrollbar";
 
 const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
   const [search, setSearch] = useState("");
   const [bodyParts, setBodyParts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
-    const fetchExercisesData = async () => {
-      const bodyPartsData = await fetchData(
-        "https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
-        exerciseOptions
-      );
-      console.log("bodyPartsData", bodyPartsData);
-
-      setBodyParts(["all", ...bodyPartsData]);
+    const fetchBodyParts = async () => {
+      try {
+        setIsLoading(true);
+        const bodyPartsData = await exerciseAPI.getBodyParts();
+        setBodyParts(bodyPartsData);
+      } catch (error) {
+        console.error("Error fetching body parts:", error);
+        // Fallback data
+        setBodyParts([
+          "all",
+          "back",
+          "cardio",
+          "chest",
+          "lower arms",
+          "lower legs",
+          "neck",
+          "shoulders",
+          "upper arms",
+          "upper legs",
+          "waist",
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    fetchExercisesData();
+    fetchBodyParts();
   }, []);
 
   const handleSearch = async () => {
-    if (search) {
-      const exercisesData = await fetchData(
-        "https://exercisedb.p.rapidapi.com/exercises",
-        exerciseOptions
-      );
-      console.log(exercisesData);
+    if (!search.trim()) return;
 
-      const searchedExercises = exercisesData.filter(
-        (item) =>
-          item.name.toLowerCase().includes(search) ||
-          item.target.toLowerCase().includes(search) ||
-          item.equipment.toLowerCase().includes(search) ||
-          item.bodyPart.toLowerCase().includes(search)
-      );
+    try {
+      setIsSearching(true);
+      const result = await exerciseAPI.searchExercises(search.toLowerCase(), {
+        limit: 50, // Get more results for search
+      });
 
+      // Extract exercises from the result
+      const exercises = result.exercises || result;
+      setExercises(exercises);
+
+      // Scroll to results
       window.scrollTo({ top: 1800, left: 100, behavior: "smooth" });
-
       setSearch("");
-      setExercises(searchedExercises);
+    } catch (error) {
+      console.error("Error searching exercises:", error);
+      // You might want to show an error message to the user
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
     }
   };
 
@@ -59,27 +83,40 @@ const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
             className="h-14 pl-6 pr-32 lg:pr-44 text-base font-bold border-none rounded-full bg-white shadow-lg"
             style={{ width: "100%" }}
             value={search}
-            onChange={(e) => setSearch(e.target.value.toLowerCase())}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyPress={handleKeyPress}
             placeholder="Search Exercises"
             type="text"
+            disabled={isSearching}
           />
           <Button
-            className="absolute right-0 top-0 h-14 px-6 lg:px-12 bg-[#FF2625] hover:bg-[#e01e20] text-white rounded-full text-base lg:text-xl"
+            className="absolute right-0 top-0 h-14 px-6 lg:px-12 bg-[#FF2625] hover:bg-[#e01e20] text-white rounded-full text-base lg:text-xl disabled:opacity-50"
             onClick={handleSearch}
+            disabled={isSearching || !search.trim()}
           >
-            <Search className="h-5 w-5 mr-2" />
-            Search
+            {isSearching ? (
+              <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+            ) : (
+              <Search className="h-5 w-5 mr-2" />
+            )}
+            {isSearching ? "Searching..." : "Search"}
           </Button>
         </div>
       </div>
 
       <div className="relative w-full p-5 mt-8">
-        <HorizontalScrollbar
-          data={bodyParts}
-          bodyParts
-          setBodyPart={setBodyPart}
-          bodyPart={bodyPart}
-        />
+        {isLoading ? (
+          <div className="flex justify-center">
+            <Loader2 className="h-6 w-6 animate-spin" />
+          </div>
+        ) : (
+          <HorizontalScrollbar
+            data={bodyParts}
+            bodyParts
+            setBodyPart={setBodyPart}
+            bodyPart={bodyPart}
+          />
+        )}
       </div>
     </div>
   );

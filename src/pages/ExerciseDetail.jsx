@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { exerciseOptions, fetchData, youtubeOptions } from "../utils/fetchData";
+import { fetchData, youtubeOptions, exerciseAPI } from "../utils/fetchData";
 import Detail from "../components/Detail";
 import ExerciseVideos from "../components/ExerciseVideos";
 import SimilarExercises from "../components/SimilarExercises";
@@ -17,13 +17,9 @@ const ExerciseDetail = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     const fetchExercisesData = async () => {
-      const exerciseDbUrl = import.meta.env.VITE_EXERCISE_API_URL;
       const youtubeSearchUrl = import.meta.env.VITE_YOUTUBE_API_URL;
 
-      const exerciseDetailData = await fetchData(
-        `${exerciseDbUrl}/exercises/exercise/${id}`,
-        exerciseOptions
-      );
+      const exerciseDetailData = await exerciseAPI.getExerciseById(id);
       setExerciseDetail(exerciseDetailData);
 
       const exerciseVideosData = await fetchData(
@@ -32,17 +28,19 @@ const ExerciseDetail = () => {
       );
       setExerciseVideos(exerciseVideosData.contents);
 
-      const targetMuscleExercisesData = await fetchData(
-        `${exerciseDbUrl}/exercises/target/${exerciseDetailData.target}`,
-        exerciseOptions
+      const targetMuscleExercisesData = await exerciseAPI.getExercisesByTarget(
+        exerciseDetailData.target
       );
-      setTargetMuscleExercises(targetMuscleExercisesData);
+      setTargetMuscleExercises(
+        targetMuscleExercisesData.exercises || targetMuscleExercisesData
+      );
 
-      const equimentExercisesData = await fetchData(
-        `${exerciseDbUrl}/exercises/equipment/${exerciseDetailData.equipment}`,
-        exerciseOptions
+      const equipmentExercisesData = await exerciseAPI.getExercisesByEquipment(
+        exerciseDetailData.equipment
       );
-      setEquipmentExercises(equimentExercisesData);
+      setEquipmentExercises(
+        equipmentExercisesData.exercises || equipmentExercisesData
+      );
     };
 
     fetchExercisesData();

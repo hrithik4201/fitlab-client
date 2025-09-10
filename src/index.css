@@ -165,31 +165,14 @@ body {
   margin-top: -330px;
 }
 
-.exercise-card {
-  width: 400px;
-  height: 445px;
-  background: #fff;
-  border-top: 4px solid #ff2625;
-  border-bottom-left-radius: 20px;
-  text-decoration: none;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  padding-bottom: 10px;
-  transform: scale(1, 1);
-  transition: 0.3s all ease-in-out;
-}
 
-.exercise-card img {
-  height: 326px;
-}
 
 .bodyPart-card {
   transform: scale(1, 1);
   transition: 0.3s all ease-in-out;
 }
 
-.exercise-card:hover,
+
 .bodyPart-card:hover {
   transform: scale(1.1, 1.1);
 }
@@ -250,9 +233,7 @@ body {
     display: none;
   }
 
-  .exercise-card {
-    width: 320px;
-  }
+
 
   .exercise-video {
     width: 320px;
@@ -260,8 +241,4 @@ body {
   }
 }
 
-@media screen and (max-width: 400px) {
-  .exercise-card {
-    width: 280px;
-  }
-}
+

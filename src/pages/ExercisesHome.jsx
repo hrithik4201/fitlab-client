@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import Exercises from '../components/Exercises';
-import SearchExercises from '../components/SearchExercises';
+import React, { useState } from "react";
+import SearchExercises from "../components/SearchExercises";
+import Exercises from "../components/Exercises";
 
 const ExercisesHome = () => {
   const [exercises, setExercises] = useState([]);
-  const [bodyPart, setBodyPart] = useState('all');
+  const [bodyPart, setBodyPart] = useState("all");
+
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50/30">
       <SearchExercises
         setExercises={setExercises}
         bodyPart={bodyPart}
         setBodyPart={setBodyPart}
       />
       <Exercises
-        setExercises={setExercises}
         exercises={exercises}
+        setExercises={setExercises}
         bodyPart={bodyPart}
       />
     </div>

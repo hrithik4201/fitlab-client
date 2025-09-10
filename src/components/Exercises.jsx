@@ -1,45 +1,59 @@
 import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { exerciseOptions, fetchData } from "../utils/fetchData";
+import { exerciseAPI } from "../utils/fetchData";
 import ExerciseCard from "./ExerciseCard";
 import Loader from "./Loader";
 
 const Exercises = ({ exercises, setExercises, bodyPart }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [exercisesPerPage] = useState(6);
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalExercises, setTotalExercises] = useState(0);
 
   useEffect(() => {
     const fetchExercisesData = async () => {
-      let exercisesData = [];
+      try {
+        setIsLoading(true);
 
-      if (bodyPart === "all") {
-        exercisesData = await fetchData(
-          "https://exercisedb.p.rapidapi.com/exercises",
-          exerciseOptions
-        );
-      } else {
-        exercisesData = await fetchData(
-          `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}`,
-          exerciseOptions
-        );
+        let result;
+        if (bodyPart === "all") {
+          result = await exerciseAPI.getExercises({
+            page: currentPage,
+            limit: exercisesPerPage,
+          });
+        } else {
+          result = await exerciseAPI.getExercisesByBodyPart(bodyPart, {
+            page: currentPage,
+            limit: exercisesPerPage,
+          });
+        }
+
+        // Handle the response structure from your backend
+        const exercisesData = result.exercises || result;
+        const pagination = result.pagination;
+
+        setExercises(exercisesData);
+        setTotalExercises(pagination?.totalExercises || exercisesData.length);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+        setExercises([]);
+        setTotalExercises(0);
+      } finally {
+        setIsLoading(false);
       }
-
-      setExercises(exercisesData);
     };
 
     fetchExercisesData();
-  }, [bodyPart, setExercises]);
+  }, [bodyPart, currentPage, setExercises]);
 
-  // Pagination
-  const indexOfLastExercise = currentPage * exercisesPerPage;
-  const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
-  const currentExercises = exercises.slice(
-    indexOfFirstExercise,
-    indexOfLastExercise
-  );
+  // Reset to page 1 when bodyPart changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [bodyPart]);
 
-  const totalPages = Math.ceil(exercises.length / exercisesPerPage);
+  // Calculate pagination based on total exercises from API
+  const totalPages = Math.ceil(totalExercises / exercisesPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -72,7 +86,23 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
     return pages;
   };
 
-  if (!currentExercises.length) return <Loader />;
+  if (isLoading) return <Loader />;
+
+  if (!exercises || exercises.length === 0) {
+    return (
+      <div id="exercises" className="mt-12 p-5">
+        <h2 className="text-4xl lg:text-[44px] font-bold mb-12 text-center lg:text-left">
+          No Results Found
+        </h2>
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">
+            No exercises found for the selected criteria. Try a different body
+            part or search term.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div id="exercises" className="mt-12 p-5">
@@ -82,13 +112,16 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
 
       {/* Exercise Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-[50px] justify-items-center">
-        {currentExercises.map((exercise, idx) => (
-          <ExerciseCard key={idx} exercise={exercise} />
+        {exercises.map((exercise, idx) => (
+          <ExerciseCard
+            key={exercise.exerciseId || exercise.id || exercise._id || idx}
+            exercise={exercise}
+          />
         ))}
       </div>
 
       {/* Pagination */}
-      {exercises.length > exercisesPerPage && (
+      {totalPages > 1 && (
         <div className="flex items-center justify-center mt-16 lg:mt-[114px] space-x-2">
           {/* Previous Button */}
           <Button
@@ -135,6 +168,12 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
           </Button>
         </div>
       )}
+
+      {/* Results Info */}
+      <div className="text-center mt-8 text-gray-500 text-sm">
+        Showing {exercises.length} of {totalExercises} exercises
+        {totalPages > 1 && ` (Page ${currentPage} of ${totalPages})`}
+      </div>
     </div>
   );
 };
