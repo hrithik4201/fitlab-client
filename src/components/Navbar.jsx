@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/Logo.png";
 
 const Navbar = () => {
   const { logout } = useLogout();

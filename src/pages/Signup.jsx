@@ -26,7 +26,7 @@ import {
   Target,
   TrendingUp,
 } from "lucide-react";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/Logo.png";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
